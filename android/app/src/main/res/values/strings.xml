@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Time Manager</string>
+    <string name="dashboard">Dashboard</string>
+    <string name="settings">Settings</string>
+    <string name="permissions">Permissions</string>
+    <string name="pdf_library">PDF Library</string>
+    <string name="no_rules">No rules yet</string>
+    <string name="add_rule">Add rule</string>
+    <string name="edit_rule">Edit rule</string>
+    <string name="delete">Delete</string>
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
+    <string name="active_studying">Active Studying</string>
+    <string name="passive_reading">Passive Reading</string>
+    <string name="away">Away</string>
+    <string name="not_studying">Not Studying</string>
+    <string name="limit_reached">Time\'s up</string>
+    <string name="paused">Paused</string>
+    <string name="resume">Resume</string>
+    <!-- Add more strings; Arabic overrides in values-ar -->
+</resources>

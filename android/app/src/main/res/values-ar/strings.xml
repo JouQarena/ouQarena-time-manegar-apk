@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">مدير الوقت</string>
+    <string name="dashboard">لوحة التحكم</string>
+    <string name="settings">الإعدادات</string>
+    <string name="permissions">الأذونات</string>
+    <string name="pdf_library">مكتبة PDF</string>
+    <string name="no_rules">لا توجد قواعد بعد</string>
+    <string name="add_rule">إضافة قاعدة</string>
+    <string name="edit_rule">تعديل القاعدة</string>
+    <string name="delete">حذف</string>
+    <string name="save">حفظ</string>
+    <string name="cancel">إلغاء</string>
+    <string name="active_studying">دراسة نشطة</string>
+    <string name="passive_reading">قراءة ساكنة</string>
+    <string name="away">بعيد</string>
+    <string name="not_studying">ليس في الدراسة</string>
+    <string name="limit_reached">انتهى الوقت</string>
+    <string name="paused">متوقف مؤقتاً</string>
+    <string name="resume">استئناف</string>
+</resources>
