@@ -1,0 +1,16 @@
+# Gradle / build output
+.gradle/
+build/
+app/build/
+
+# Local configuration (use local.properties.example as template)
+local.properties
+
+# Signing — never commit
+keystore.properties
+*.keystore
+*.jks
+
+# IDE
+.idea/
+*.iml
