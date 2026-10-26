@@ -3,7 +3,7 @@
 ## Automated tests (JVM, run anywhere)
 
 ```bash
-cd android
+# From the repository root (project is at the root; there is no android/ folder):
 ./gradlew testDebugUnitTest
 ```
 

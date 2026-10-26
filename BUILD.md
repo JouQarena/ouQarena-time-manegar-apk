@@ -16,9 +16,9 @@
 ## Debug APK (unsigned, installable)
 
 ```bash
-cd android
+# Project is at the repository root (no android/ folder) — run from the repo root:
 ./gradlew assembleDebug
-# output: android/app/build/outputs/apk/debug/app-debug.apk  (~8–14 MB)
+# output: app/build/outputs/apk/debug/app-debug.apk  (~8–14 MB)
 ```
 
 Install on device/emulator:
@@ -31,7 +31,7 @@ adb shell am start -n com.timemanager.android.debug/.ui.MainActivity
 
 ## Release APK (signed)
 
-Create `android/keystore.properties` (never commit):
+Create `keystore.properties` at the repository root (never commit — it is gitignored):
 
 ```
 storeFile=/path/to/release.keystore

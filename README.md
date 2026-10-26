@@ -13,18 +13,18 @@ Native Android port of the desktop Time Manager (Python + PySide6) → Kotlin + 
 - **i18n:** English + العربية (RTL), instant switch, `supportsRtl`.
 - Storage: Room DB v3 (mirrors desktop `schema.sql`), DataStore settings, encrypted floor file, validated backups via SAF.
 
-See `docs/ANDROID_AUDIT_AND_MIGRATION_PLAN.md` (Phase A audit) and `android/FEATURE_PARITY.md`.
+See `docs/ANDROID_AUDIT_AND_MIGRATION_PLAN.md` (Phase A audit) and `FEATURE_PARITY.md` (repo root).
 
 ## Requirements
 
 - Android Studio Hedgehog+ / Gradle 8.10.2 / JDK 17
-- Android SDK via `android-actions/setup-android@v3` on CI — no local `sdkmanager` install needed (the action provisions `platform-tools`, `platforms;android-34`, `build-tools;34.0.0` automatically). For local builds, install via Android Studio SDK Manager or `sdkmanager`.
+- Android SDK via `android-actions/setup-android@v4` on CI — no local `sdkmanager` install needed (the workflow passes `packages: 'platform-tools platforms;android-34 build-tools;34.0.0'`). For local builds, install via Android Studio SDK Manager or `sdkmanager`.
 - Device: Android 8.0 (API 26) → 14+ (target 34)
 
 ## Build
 
 ```bash
-cd android
+# From the repository root (project is at the root; there is no android/ folder):
 ./gradlew assembleDebug   # APK at app/build/outputs/apk/debug/app-debug.apk
 ./gradlew test            # JVM unit tests (schedule/state-machine/tracker/policy)
 ./gradlew connectedAndroidTest  # instrumented (DB migrations, SAF on device)
@@ -37,13 +37,13 @@ No signing config committed — debug keystore is auto-generated. Release signin
 GitHub Actions (`.github/workflows/android.yml`):
 
 1. `actions/checkout@v4`
-2. `setup-java` (Temurin 17, Gradle cache)
-3. `android-actions/setup-android@v3` (provisions SDK — **no manual `sdkmanager` step**; the deprecated `tools` package is not requested)
-4. `yes | sdkmanager --licenses`
+2. `setup-java@v4` (Temurin 17, Gradle cache)
+3. `android-actions/setup-android@v4` with `packages: 'platform-tools platforms;android-34 build-tools;34.0.0'` (provisions SDK and accepts licenses — **no manual `sdkmanager` step**; the deprecated `tools` package is not requested)
+4. `gradle/actions/wrapper-validation@v3` + `chmod +x ./gradlew`
 5. `./gradlew assembleDebug` → uploads `app-debug.apk` as artifact
 6. `./gradlew testDebugUnitTest` → uploads test results
 
-> **Fix for previous failure:** `sdkmanager "tools"` was removed — that package no longer exists and `setup-android` already installs the required platforms/build-tools.
+> **Fix for previous failure:** `setup-android@v3` defaulted to `sdkmanager tools ...`, but Google no longer serves the legacy `tools` package, so `sdkmanager` failed with `Failed to find package 'tools'` (exit 1). Fixed by upgrading to `setup-android@v4` and listing the required packages explicitly. The Gradle project is at the repository root, so the workflow runs `./gradlew` there (no `android/` working-directory).
 
 ## Run
 
@@ -55,7 +55,7 @@ GitHub Actions (`.github/workflows/android.yml`):
 ## Project layout
 
 ```
-android/
+. (repo root)
 ├── app/
 │   ├── src/main/java/com/timemanager/android/
 │   │   ├── domain/      # Pure Kotlin: Rule/Schedule/TimeUtils/StateMachine/Policy/Tracker/Pause/StudyMode
