@@ -4,13 +4,29 @@ on:
   push:
     branches: [ main ]
     paths:
-      - 'android/**'
+      - 'app/**'
+      - 'build.gradle.kts'
+      - 'settings.gradle.kts'
+      - 'gradle.properties'
+      - 'gradle/**'
+      - 'gradlew'
+      - 'gradlew.bat'
       - '.github/workflows/android.yml'
   pull_request:
     branches: [ main ]
     paths:
-      - 'android/**'
+      - 'app/**'
+      - 'build.gradle.kts'
+      - 'settings.gradle.kts'
+      - 'gradle.properties'
+      - 'gradle/**'
+      - 'gradlew'
+      - 'gradlew.bat'
+      - '.github/workflows/android.yml'
   workflow_dispatch:
+
+permissions:
+  contents: read
 
 jobs:
   build:
@@ -25,34 +41,44 @@ jobs:
           java-version: '17'
           cache: gradle
 
+      # Do NOT request the legacy 'tools' package: Google no longer serves it,
+      # so `sdkmanager tools` fails with "Failed to find package 'tools'".
+      # That was the default of setup-android@v3 ('tools platform-tools').
+      # v4 drops 'tools' from the defaults; we also pin exactly what this
+      # project needs (compileSdk/targetSdk 34 — see app/build.gradle.kts).
+      # The action accepts the SDK licenses, so no manual sdkmanager step.
       - name: Set up Android SDK
-        uses: android-actions/setup-android@v3
-
-      - name: Accept licenses
-        run: yes | sdkmanager --licenses || true
+        uses: android-actions/setup-android@v4
+        with:
+          packages: 'platform-tools platforms;android-34 build-tools;34.0.0'
+          log-accepted-android-sdk-licenses: 'false'
 
       - name: Gradle wrapper validation
         uses: gradle/actions/wrapper-validation@v3
 
+      - name: Make gradlew executable
+        run: chmod +x ./gradlew
+
+      # Project lives at the repository root (there is no android/ folder).
       - name: Build debug APK
-        working-directory: android
         run: ./gradlew assembleDebug --stacktrace
 
       - name: Run JVM unit tests
-        working-directory: android
         run: ./gradlew testDebugUnitTest --stacktrace
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
           name: app-debug-apk
-          path: android/app/build/outputs/apk/debug/app-debug.apk
+          path: app/build/outputs/apk/debug/app-debug.apk
           retention-days: 30
+          if-no-files-found: error
 
       - name: Upload test results
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: test-results
-          path: android/app/build/test-results/
+          path: app/build/test-results/
           retention-days: 14
+          if-no-files-found: ignore
